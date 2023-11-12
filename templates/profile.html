@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="profile-picture-container">
+        <img src="{{ url_for('static', filename='profile_pictures/' + profile_picture_path) }}"
+             alt="Profile Picture"
+             width="auto"
+             height="auto">
+    </div>
+    <br />
+    <br />
+    <h5>{{ username }}</h5>
+    <form id="profile_form" action='{{ url_for("profile") }}' method="post">
+        <button type="submit"
+                class="btn btn-white btn-small"
+                name="action"
+                value="edit">Edit Profile</button>
+        <button type="submit"
+                class="btn btn-white btn-small"
+                name="action"
+                value="stats">Run Log</button>
+        <br>
+        <br>
+        <br>
+        <button type="submit"
+                class="btn btn-orange btn-medium"
+                name="action"
+                value="add_run">Add Run</button>
+                <button type="submit"
+                class="btn btn-orange btn-medium"
+                name="action"
+                value="add_workout">Add Workout</button>
+    </form>
+    <br />
+</div>
+<div class="container-fluid fade-container py-3">
+    <div class="text-center">
+        <br>
+        <br>
+    </div>
+</div>
+<div class="container ">
+    <br>
+    <form id="table-form" method="post">
+        <table id="table" class="table table-striped">
+            <thead>
+                <tr>
+                    {% for column_name in column_names %}
+                        <th class="table-separator {% if loop.last %}total-separator{% endif %}">{{ column_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                {% set row_number = 0 %}
+                {% for row in table_data %}
+                    <tr>
+                        {% for value in row %}
+                            <td {% if not loop.last %}contenteditable="true" {% else %} class="total-separator"{% endif %}>
+                                {% if value == 0 %}
+                                    {{ "" }}
+                                {% else %}
+                                    {% set value = value|round(1) %}
+                                    {% if value == value|int %}
+                                        {% set value = value|int %}
+                                    {% endif %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% set row_number = row_number + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    <form id="edit-table-form" method="post">
+        <button type="submit"
+                class="btn btn-white btn-small"
+                name="action"
+                value="add_row">Add Row</button>
+        <button type="submit"
+                class="btn btn-white btn-small"
+                name="action"
+                value="clear_empty_rows">Clear Empty Rows</button>
+    </form>
+</div>
+<br />
+<br />
+<br />
+<br />
+</div>
+<script>
+        var activeCell = null;
+        var dataCell = null; // Added dataCell variable
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var table = document.getElementById('table');
+
+            table.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendData(e.target);
+                }
+            });
+
+            table.addEventListener("blur", (event) => {
+                dataCell = event;
+                sendData(activeCell);
+            }, true);
+
+            table.addEventListener("click", (event) => {
+                console.log("click")
+                if (activeCell !== null) {
+                    activeCell.blur();
+                }
+                activeCell = event.target;
+                
+            });    
+        });
+
+        function sendData(cell) {
+            if (cell !== null) {
+                var cell = cell;
+                var rowIndex = cell.parentElement.rowIndex;
+                var colIndex = cell.cellIndex;
+                var value = cell.innerText;
+
+                // Check if the value has changed
+                if (value !== cell.dataset.previousValue) {
+                    var tupleString = JSON.stringify([rowIndex, colIndex, value]);
+
+                    fetch('{{ url_for("update_table") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ edited_data: tupleString })
+                    })
+                    .then(response => response.json())
+                    .then((data) => {
+                        var tableData = data.table_data;
+                        createTable(tableData, activeCell);
+
+                        // Update the previous value
+                        cell.dataset.previousValue = value;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            } else {
+                console.error('Active cell is null');
+            }
+        }
+
+
+        function createTable(tableData, activeCell) {
+            var newTableBody = document.createElement('tbody');
+            newTableBody.id = 'table-body';
+
+            // Assuming tableData is a JavaScript variable containing your data
+            tableData.forEach(function(row) {
+                var rowElement = document.createElement('tr');
+                row.forEach(function(value, index) {
+                    var cellElement = document.createElement('td');
+                    if (index < 7) {
+                        cellElement.contentEditable = 'true';
+                    }
+                    if (value !== 0) {
+                        var roundedValue = Math.round(value * 10) / 10;
+
+                        if (Math.floor(roundedValue) === roundedValue) {
+                            roundedValue = roundedValue.toFixed(0);
+                        } else {
+                            roundedValue = roundedValue.toFixed(1);
+                        }
+                        cellElement.innerText = roundedValue;
+                    }
+                    if (index === row.length - 1) {
+                        cellElement.classList.add('total-separator');
+                    }
+                    rowElement.appendChild(cellElement);
+                });
+                newTableBody.appendChild(rowElement);
+            });
+
+            var oldTableBody = document.getElementById('table-body');
+            oldTableBody.parentNode.replaceChild(newTableBody, oldTableBody);
+            
+            // Focus on the activeCell if it exists
+            if (activeCell !== null) {
+                setTimeout(function() {
+                    activeCell.focus();
+                }, 1);
+            }
+        }
+
+        document.getElementById('edit-table-form').addEventListener('submit', function(e) {
+            e.preventDefault();    
+            var button = e.submitter.value;
+
+            fetch('{{ url_for("update_table") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: button }),
+            })
+            .then(response => response.json())
+            .then((data) => {
+                var tableData = data.table_data;
+                activeCell = null;
+                createTable(tableData, activeCell);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+</script>
+{% endblock content %}

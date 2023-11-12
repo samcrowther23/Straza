@@ -1,0 +1,29 @@
+{% extends "index_base.html" %}
+{% block content %}
+    <br />
+    <br />
+    <form id="signup-form" method="post" action='{{ url_for("signup") }}'>
+        {{ form.hidden_tag() }}
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">@</span>
+            {{ form.username(type="text",class="form-control", placeholder="Username") }}
+        </div>
+        {% for error in form.username.errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+        <div class="input-group mb-3">{{ form.password(type="password", class="form-control", placeholder="Password") }}</div>
+        <div class="input-group mb-3">
+            {{ form.confirm_password(type="password", class="form-control", placeholder="Confirm Password") }}
+        </div>
+        {% for error in form.password.errors %}
+            <div class="alert alert-danger alert-dismissible fade show">
+                {{ error }}
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <div class="container text-center">
+            <button type="submit" class="btn btn-white">Submit</button>
+        </div>
+    </form>
+{% endblock content %}

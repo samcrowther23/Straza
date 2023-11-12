@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+    <style>
+  .run-log {
+    padding: 12px 11px;
+  }
+    </style>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="row table-separator">
+                <div class="col-md-10">
+                    <h1>week {{ week+1 }}</h1>
+                </div>
+                <div class="col-md-2 run-log">
+                    <a href='{{ url_for("runs") }}' class="btn btn-white btn-small">Run Log</a>
+                </div>
+            </div>
+            <br />
+            <h3>Stats</h3>
+            <p>Total time: {{ total_time }} minutes</p>
+            <br />
+            <br />
+            <br />
+            <br />
+        </div>
+        <div class="col-md-5">
+            <canvas id="runZoneChart"></canvas>
+        </div>
+    </div>
+    <script>
+  var pieChartData = {
+      labels: ['Zone 2', 'Zone 3', 'Zone 4', 'Zone 5'],
+      datasets: [{
+          data: {{ time_in_zones|tojson }}, // Time in minutes for each zone
+          backgroundColor: [
+          //'#B0B0B0', // Gray
+          '#78C7FF', // Light Blue
+          '#78FF78', // Light Green
+          '#FFA854', // Light Orange
+          '#FF6363'  // Light Red
+      ],
+      }]
+  };
+  var ctx = document.getElementById('runZoneChart').getContext('2d');
+  var myPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: pieChartData,
+      options: {
+          // Additional options if needed
+      }
+  });
+    </script>
+{% endblock content %}

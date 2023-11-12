@@ -1,0 +1,28 @@
+{
+  "workbench.colorTheme": "SynthWave '84",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "explorer.confirmDelete": false,
+  "[python]": {
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "[html]": {
+    "editor.suggest.insertMode": "replace",
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true
+  },
+  "[jinja-html]": {
+    "editor.defaultFormatter": "monosans.djlint",
+    "editor.formatOnType": false,
+    "editor.formatOnSave": true,
+  },
+  "files.associations": {
+    "**\\templates\\*.html": "jinja-html"
+  },
+  "explorer.confirmDragAndDrop": false,
+  "emmet.includeLanguages": {
+    "jinja-html": "html"
+  },
+  "python.analysis.typeCheckingMode": "basic"
+}

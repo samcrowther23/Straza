@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+    <style>
+  .run-log {
+    padding: 12px 11px;
+  }
+    </style>
+    {% if run.distance == 0 %}
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row table-separator">
+                    <div class="col-md-10">
+                        <h1>{{ run.run_type|title }} workout on {{ formatted_date }}</h1>
+                    </div>
+                    <div class="col-md-2 run-log">
+                        <a href='{{ url_for("runs") }}' class="btn btn-white btn-small">Run Log</a>
+                    </div>
+                </div>
+                <p>{{ run.text }}</p>
+                <br />
+                <h3>Stats</h3>
+                <p>Zone 2 Time: {{ run.zone_2_time }} minutes</p>
+                <p>Zone 3 Time: {{ run.zone_3_time }} minutes</p>
+                <p>Zone 4 Time: {{ run.zone_4_time }} minutes</p>
+                <p>Zone 5 Time: {{ run.zone_5_time }} minutes</p>
+                <p>Total Time: {{ run.total_time }} minutes</p>
+                <br />
+                <br />
+                <a href="{{ url_for('delete_run', run_id=run.id) }}"
+                   class="btn btn-orange btn-small">Delete workout</a>
+                <a href="{{ url_for('edit_run', run_id=run.id) }}"
+                   class="btn btn-orange btn-small">Edit workout</a>
+                <br />
+                <br />
+            </div>
+            <div class="col-md-5">
+                <canvas id="runZoneChart"></canvas>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row table-separator">
+                    <div class="col-md-10">
+                        <h1>{{ run.run_type|title }} run on {{ formatted_date }}</h1>
+                    </div>
+                    <div class="col-md-2 run-log">
+                        <a href='{{ url_for("runs") }}' class="btn btn-white btn-small">Run Log</a>
+                    </div>
+                </div>
+                <p>{{ run.text }}</p>
+                <br />
+                <h3>Stats</h3>
+                <p>Distance: {{ run.distance }} km</p>
+                <p>Run Type: {{ run.run_type }}</p>
+                <p>Zone 2 Time: {{ run.zone_2_time }} minutes</p>
+                <p>Zone 3 Time: {{ run.zone_3_time }} minutes</p>
+                <p>Zone 4 Time: {{ run.zone_4_time }} minutes</p>
+                <p>Zone 5 Time: {{ run.zone_5_time }} minutes</p>
+                <p>Total Time: {{ run.total_time }} minutes</p>
+                <br />
+                <br />
+                <a href="{{ url_for('delete_run', run_id=run.id) }}"
+                   class="btn btn-orange btn-small">Delete run</a>
+                <a href="{{ url_for('edit_run', run_id=run.id) }}"
+                   class="btn btn-orange btn-small">Edit run</a>
+                <br />
+                <br />
+            </div>
+            <div class="col-md-5">
+                <canvas id="runZoneChart"></canvas>
+            </div>
+        </div>
+    {% endif %}
+    <script>
+  var pieChartData = {
+      labels: ['Zone 2', 'Zone 3', 'Zone 4', 'Zone 5'],
+      datasets: [{
+          data: {{ time_in_zones|tojson }}, // Time in minutes for each zone
+          backgroundColor: [
+          //'#B0B0B0', // Gray
+          '#78C7FF', // Light Blue
+          '#78FF78', // Light Green
+          '#FFA854', // Light Orange
+          '#FF6363'  // Light Red
+      ],
+      }]
+  };
+  var ctx = document.getElementById('runZoneChart').getContext('2d');
+  var myPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: pieChartData,
+      options: {
+          // Additional options if needed
+      }
+  });
+    </script>
+{% endblock content %}

@@ -1,0 +1,37 @@
+{% extends "index_base.html" %}
+{% block content %}
+    <div class="container centered-box">
+        <div class="row">
+            <div class="text-center">
+                <h1>Welcome!</h1>
+                <br />
+                <button id="signup"
+                        onclick="handleButtonClick('signup')"
+                        class="btn btn-orange">Sign up</button>
+                <br />
+                <br />
+                <button id="login" onclick="handleButtonClick('login')" class="btn btn-white">Log in</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // JavaScript function to handle button clicks
+        function handleButtonClick(buttonId) {
+            // Create a form and add a hidden field to identify the clicked button
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{url_for("index")}}';
+
+            const buttonField = document.createElement('input');
+            buttonField.type = 'hidden';
+            buttonField.name = 'button_id';
+            buttonField.value = buttonId;
+
+            form.appendChild(buttonField);
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
+        }
+    </script>
+{% endblock content %}

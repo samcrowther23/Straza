@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if empty_text %}
+        <h2>{{ empty_text }}</h2>
+    {% else %}
+        <div class="matrix-container">
+            <div class="week-row">
+                <div class="day-cell matrix-head">
+                    <h5>Monday</h5>
+                </div>
+                <div class="day-cell matrix-head">
+                    <h5>Tuesday</h5>
+                </div>
+                <div class="day-cell matrix-head">
+                    <h5>Wednsday</h5>
+                </div>
+                <div class="day-cell matrix-head">
+                    <h5>Thursday</h5>
+                </div>
+                <div class="day-cell matrix-head">
+                    <h5>Friday</h5>
+                </div>
+                <div class="day-cell matrix-head">
+                    <h5>Saturday</h5>
+                </div>
+                <div class="day-cell matrix-head">
+                    <h5>Sunday</h5>
+                </div>
+                <div class="day-cell matrix-head">
+                    <h5>Total</h5>
+                </div>
+            </div>
+            {% set indices = [] %} {% set week = [] %}
+            {% for row in matrix %}
+                <div class="week-row">
+                    {% for runs_in_day in row %}
+                        <div class="day-cell">
+                            {% for _ in range(runs_in_day) %}
+                                {% set run = runs[indices|length] %}
+                                <div class="run {{ run.run_type }} workout">
+                                    <a class="{{ run.run_type }} run-link workout"
+                                       href="{{ url_for('run_details', run_id=run.id) }}">
+                                        {% if run.run_type == "parkrun" %}
+                                            <h6>{{ run.run_type|title }}</h6>
+                                        {% elif run.distance == 0 %}
+                                            <h6>{{ run.total_time }}min {{ run.run_type|title }}</h6>
+                                        {% else %}
+                                            <h6>{{ run.distance }}km {{ run.run_type|title }}</h6>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                {% if indices.append(loop.index) %}{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <div class="total-distance">
+                        <a class="run-link"
+                           href="{{ url_for('week_details', week=week|length) }}">
+                            <h5>{{ totalDistance[week|length] }} km</h5>
+                        </a>
+                    </div>
+                    {% if week.append(loop.index) %}{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock content %}

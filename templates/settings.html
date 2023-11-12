@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <form action='{{ url_for("settings") }}' method="post">
+        <button type="submit"
+                class="btn btn-orange btn-small"
+                name="action"
+                value="profilePicture">change profile picture</button>
+        <button type="submit"
+                class="btn btn-orange btn-small"
+                name="action"
+                value="changePassword">change password</button>
+        <button type="submit"
+                class="btn btn-orange btn-small"
+                name="action"
+                value="resetRuns">Reset Runs</button>
+    </form>
+{% endblock content %}

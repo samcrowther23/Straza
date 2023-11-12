@@ -1,0 +1,335 @@
+.bg-orange {
+    background-color: orangered;
+    /* Your custom background color */
+}
+
+.bg-lorange {
+    background-color: rgb(255, 159, 124);
+    /* Your custom background color */
+}
+
+.bg-gray {
+    background-color: rgb(255, 219, 219);
+    /* Your custom background color */
+}
+
+.fade-container {
+    background-image: linear-gradient(to bottom, rgb(255, 176, 147), white);
+    border-top: 2px solid orangered;
+}
+
+/* button classes */
+
+.btn-orange {
+    background-color: orangered;
+    color: white;
+    border: 2px outset orangered;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: rgb(190, 50, 0);
+        color: white;
+        /* Darker color on hover */
+    }
+}
+
+.btn-white {
+    background-color: white;
+    color: orangered;
+    border: 2px outset orangered;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: rgb(207, 55, 0);
+        color: white;
+        /* Darker color on hover */
+    }
+}
+
+.btn-small {
+    font-size: 12px;
+    /* Set desired font size */
+    padding: 5px 20px;
+    min-width: 80px;
+}
+
+.btn-medium {
+    font-size: 16px;
+    /* Set desired font size */
+    padding: 5px 30px;
+    min-width: 160px;
+}
+
+
+/* profile classes */
+
+.profile-picture-container {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+    /* This creates a circular shape */
+}
+
+.profile-picture-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensures the image covers the container */
+    object-position: center;
+    /* Centers the image */
+}
+
+/* table classes */
+
+.editable:hover {
+    background-color: rgb(255, 241, 236);
+    /* Change to your preferred darker color */
+    cursor: pointer;
+}
+
+.table-separator {
+    border-bottom: 1px solid orangered;
+    /* Adjust the color and thickness as needed */
+}
+
+.total-separator {
+    border-left: 1px solid rgb(255, 68, 0);
+    /* Adjust the color and thickness as needed */
+}
+
+.matrix-container {
+    border: 1px solid orangered;
+    display: flex;
+    flex-direction: column;
+}
+
+.week-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.day-cell {
+    border: 1px solid orangered;
+    height: auto;
+    width: calc(100% / 8);
+}
+
+.matrix-head {
+    background-color: rgb(226, 229, 235);
+    padding-top: 12px;
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+.total-distance {
+    border: 1px solid orangered;
+    background-color: rgb(231, 234, 238);
+    padding-top: 19px;
+    height: auto;
+    width: calc(100% / 8);
+    text-align: center;
+}
+
+
+.run {
+    border: 2px groove;
+    transition: background-color 0.2s, color 0.3s;
+    /* Add a border */
+    border-radius: 8px;
+    /* Round the corners */
+    padding-top: 10px;
+    padding-bottom: 6px;
+    text-align: center;
+    margin: 10px;
+    background-color: rgb(202, 55, 55);
+    color: white;
+    border-color: rgb(202, 55, 55);
+}
+
+:root {
+  --website-color: rgb(255, 69, 0);
+  --website-text: black;
+
+  --easy-bg: rgb(144, 238, 144);
+  --easy-text: black;
+
+  --long-bg: rgb(106, 90, 205);
+  --long-text: white;
+
+  --tempo-bg: rgb(255, 142, 108);
+  --tempo-text: black;
+
+  --interval-bg: rgb(221, 79, 86);
+  --interval-text: white;
+
+  --fartlek-bg: rgb(77, 207, 168);
+  --fartlek-text: rgb(0, 0, 0);
+
+  --race-bg: rgb(181, 74, 207);
+  --race-text: white;
+
+  --parkrun-bg: rgb(255, 165, 0);
+  --parkrun-text: black;
+
+  --workout-bg: rgb(236, 49, 49);
+}
+
+.run-link {
+    text-decoration: none;
+    color: var(--website-text)
+}
+
+.run {
+    border: 2px groove;
+    transition: background-color 0.2s, color 0.3s;
+    /* Add a border */
+    border-radius: 8px;
+    /* Round the corners */
+    padding-top: 10px;
+    padding-bottom: 6px;
+    text-align: center;
+    margin: 10px;
+    
+}
+
+.workout {
+    background-color: var(--workout-bg);
+    color: white;
+    border-color: var(--workout-bg);
+}
+
+.workout:hover {
+    background-color: var(--website-color);
+    color: rgb(255, 255, 255);
+    border-color: var(--website-color);
+}
+
+.easy {
+    background-color: var(--easy-bg);
+    color: var(--easy-text);
+    border-color: var(--easy-bg);
+}
+
+.easy:hover {
+    background-color: var(--website-color);
+    color: rgb(255, 255, 255);
+    border-color: var(--website-color);
+}
+
+.long {
+    background-color: var(--long-bg);
+    color: var(--long-text);
+    border-color: var(--long-bg);
+}
+
+.long:hover {
+    background-color: var(--website-color);
+    color: white;
+    border-color: var(--website-color);
+}
+
+.tempo {
+    background-color: var(--tempo-bg);
+    color: var(--tempo-text);
+    border-color: var(--tempo-bg);
+}
+
+.tempo:hover {
+    background-color: var(--website-color);
+    color: white;
+    border-color: var(--website-color);
+}
+
+.interval {
+    background-color: var(--interval-bg);
+    color: var(--interval-text);
+    border-color: var(--interval-bg);
+}
+
+.interval:hover {
+    background-color: var(--website-color);
+    color: white;
+    border-color: var(--website-color);
+}
+
+.fartlek {
+    background-color: var(--fartlek-bg);
+    color: var(--fartlek-text);
+    border-color: var(--fartlek-bg);
+}
+
+.fartlek:hover {
+    background-color: var(--website-color);
+    color: white;
+    border-color: var(--website-color);
+}
+
+.race {
+    background-color: var(--race-bg);
+    color: var(--race-text);
+    border-color: var(--race-bg);
+}
+
+.race:hover {
+    background-color: var(--website-color);
+    color: white;
+    border-color: var(--website-color);
+}
+
+.parkrun {
+    background-color: var(--parkrun-bg);
+    color: var(--parkrun-text);
+    border-color: var(--parkrun-bg);
+}
+
+.parkrun:hover {
+    background-color: var(--website-color);
+    color: white;
+    border-color: var(--website-color);
+}
+
+
+
+
+
+/* Divided Bar Container */
+.divided-bar {
+    display: flex;
+    height: 20px;
+    /* Adjust the height as needed */
+    margin-top: 10px;
+    /* Add margin for spacing */
+    background-color: #f3f3f3;
+    /* Background color of the divided bar */
+    border-radius: 5px;
+    /* Add rounded corners if desired */
+}
+
+
+
+.required-input-group {
+    color: white;
+    background-color: orangered;
+}
+
+.input-group-2 {
+    color: black;
+    background-color: rgb(120, 199, 255);
+}
+
+.input-group-3 {
+    color: black;
+    background-color: rgb(93, 255, 93);
+}
+
+.input-group-4 {
+    color: black;
+    background-color: rgb(248, 147, 52);
+}
+
+.input-group-5 {
+    color: white;
+    background-color: rgb(250, 72, 72);
+}

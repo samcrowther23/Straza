@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Log Your Run</h1>
+    <br />
+    <br />
+    <form action='{{ url_for("log_run") }}' method="post">
+        <div class="input-group">
+            <span class="input-group-text" id="addon1">Date</span>
+            <input type="date"
+                   class="form-control"
+                   id="date"
+                   name="date"
+                   aria-describedby="addon1"
+                   required />
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-text" id="addon2">Type of Run:</span>
+                <select class="form-control"
+                        id="run_type"
+                        name="run_type"
+                        aria-describedby="addon2"
+                        required>
+                    <option value="easy">Easy</option>
+                    <option value="long">Long</option>
+                    <option value="tempo">Tempo</option>
+                    <option value="interval">Interval workout</option>
+                    <option value="fartlek">Fartlek</option>
+                    <option value="race">Race</option>
+                    <option value="parkrun">Parkrun</option>
+                </select>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-text" id="distance">Distance (km)</span>
+                <input type="number"
+                       class="form-control"
+                       id="distance"
+                       name="distance"
+                       aria-describedby="distance"
+                       step="0.1"
+                       required />
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <textarea class="form-control"
+                      id="additional_notes"
+                      name="additional_notes"
+                      maxlength="200"
+                      placeholder="Description"></textarea>
+        </div>
+        <br />
+        <br />
+        <h4>Time in HR zones (minutes)</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-text required-input-group" id="total">Total time</span>
+                        <input type="text"
+                               class="form-control"
+                               id="total_time"
+                               name="total_time"
+                               aria-label="total"
+                               value="0"
+                               required />
+                    </div>
+                </div>
+            </div>
+            {% for i in range(2, 6) %}
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text input-group-{{ i }}" id="{{ i }}">{{ i }}</span>
+                            <input type="number"
+                                   class="form-control"
+                                   id="zone_{{ i }}_time"
+                                   name="zone_{{ i }}_time"
+                                   aria-label="{{ i }}"
+                                   value="0"
+                                   title="Please enter a valid integer value" />
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <br />
+        <button type="submit" class="btn btn-orange">Submit</button>
+    </form>
+    <br />
+    <br />
+    <br />
+    <script>document.getElementById("date").valueAsDate = new Date();</script>
+{% endblock content %}

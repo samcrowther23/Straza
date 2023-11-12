@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Edit Your Run</h1>
+    <br />
+    <br />
+    <form action='{{ url_for("edit_run", run_id=run.id) }}' method="post">
+        <div class="input-group">
+            <span class="input-group-text" id="dateaddon">Date</span>
+            <input type="date"
+                   class="form-control"
+                   id="date"
+                   name="date"
+                   aria-describedby="dateaddon"
+                   value="{{ run.date }}"
+                   required />
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-text" id="addon2">Type of Run:</span>
+                <select class="form-control"
+                        id="run_type"
+                        name="run_type"
+                        aria-describedby="addon2"
+                        value="{{ run.run_type }}"
+                        required>
+                    <option value="easy" {% if run.run_type == 'easy' %}selected{% endif %}>Easy</option>
+                    <option value="long" {% if run.run_type == 'long' %}selected{% endif %}>Long</option>
+                    <option value="tempo" {% if run.run_type == 'tempo' %}selected{% endif %}>Tempo</option>
+                    <option value="interval"
+                            {% if run.run_type == 'interval' %}selected{% endif %}>Interval workout</option>
+                    <option value="fartlek" {% if run.run_type == 'fartlek' %}selected{% endif %}>Fartlek</option>
+                    <option value="race" {% if run.run_type == 'race' %}selected{% endif %}>Race</option>
+                    <option value="parkrun" {% if run.run_type == 'parkrun' %}selected{% endif %}>Parkrun</option>
+                </select>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-text" id="distance">Distance (km)</span>
+                <input type="number"
+                       class="form-control"
+                       id="distance"
+                       name="distance"
+                       aria-describedby="distance"
+                       value="{{ run.distance }}"
+                       step="0.1"
+                       required />
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <textarea class="form-control"
+                      id="additional_notes"
+                      name="additional_notes"
+                      maxlength="200">{{ run.text }}</textarea>
+        </div>
+        <br />
+        <br />
+        <h4>Time in zones (minutes)</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-text required-input-group" id="total">Total time</span>
+                        <input type="number"
+                               class="form-control"
+                               id="total_time"
+                               name="total_time"
+                               aria-label="total"
+                               value="{{ run.total_time }}"
+                               step="1"
+                               required />
+                    </div>
+                </div>
+            </div>
+            {% for i in range(2, 6) %}
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text input-group-{{ i }}" id="{{ i }}">{{ i }}</span>
+                            <input type="number"
+                                   class="form-control"
+                                   id="zone_{{ i }}_time"
+                                   name="zone_{{ i }}_time"
+                                   aria-label="{{ i }}"
+                                   value="{{ run['zone_' + i|string + '_time'] }}"
+                                   title="Please enter a valid integer value"
+                                   step="1">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <br />
+        <button type="submit" class="btn btn-orange">Submit</button>
+    </form>
+    <br />
+    <br />
+    <br />
+{% endblock content %}

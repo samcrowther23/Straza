@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">username</th>
+                <th scope="col">password</th>
+                <th scope="col">Actions</th>
+                <!-- New column for buttons -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>
+                        <form action='{{ url_for("user_action") }}' method="post">
+                            <input type="hidden" name="user_id" value="{{ user.id }}" />
+                            <button type="submit"
+                                    class="btn btn-orange btn-small"
+                                    name="action"
+                                    value="delete">Delete User</button>
+                            <button type="submit"
+                                    class="btn btn-orange btn-small"
+                                    name="action"
+                                    value="resetTable">Reset Table</button>
+                            <button type="submit"
+                                    class="btn btn-orange btn-small"
+                                    name="action"
+                                    value="resetRuns">Reset Runs</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
