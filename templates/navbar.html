@@ -23,19 +23,44 @@
         <li class="nav-item">
           <a class="nav-link text-white" href='{{ url_for("profile") }}'>You</a>
         </li>
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-3"
-               type="search"
-               placeholder="Search"
-               aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">Search</button>
-      </form>
-      <ul class="navbar-nav mb-auto me-3 me-lg-0">
-        <li class="nav-item">
-          <a class="nav-link text-grey" href='{{ url_for("logout") }}'>Logout</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white"
+             href="#"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false">Training</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href='{{ url_for("runs") }}'>Run Log</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href='{{ url_for("hab_lab") }}'>Hab Lab</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item" href='{{ url_for("log_run") }}'>Add Run</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href='{{ url_for("log_workout") }}'>Add Workout</a>
+            </li>
+          </ul>
         </li>
-      </ul>
-    </div>
+      </li>
+    </ul>
+    <form class="d-flex" role="search">
+      <input class="form-control me-3"
+             type="search"
+             placeholder="Search"
+             aria-label="Search">
+      <button class="btn btn-outline-light" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav mb-auto me-3 me-lg-0">
+      <li class="nav-item">
+        <a class="nav-link text-grey" href='{{ url_for("logout") }}'>Logout</a>
+      </li>
+    </ul>
   </div>
+</div>
 </nav>

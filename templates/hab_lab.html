@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Running Injury Tracker</h2>
+    <form action='{{ url_for("hab_lab") }}' method="post">
+        <label for="injury_name">Injury Name:</label>
+        <input type="text" id="injury_name" name="injury_name" required>
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+        <label for="prevalence">Prevalence:</label>
+        <select id="prevalence" name="prevalence">
+            <option value="mild">Mild</option>
+            <option value="moderate">Moderate</option>
+            <option value="severe">Severe</option>
+        </select>
+        <button type="submit">Track Injury</button>
+    </form>
+    {% if user.injuries %}
+        <h3>Your Injuries:</h3>
+        <ul>
+            {% for injury in user.injuries %}
+                <li>
+                    <strong>{{ injury.name }}</strong>
+                    <br>
+                    <span>Start Date: {{ injury.start_date }}</span>
+                    <br>
+                    <span>Duration: {{ injury.duration }}</span>
+                    <br>
+                    <span>{{ injury.prevalence }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No injuries tracked yet.</p>
+    {% endif %}
+{% endblock content %}

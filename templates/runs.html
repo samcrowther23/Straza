@@ -56,7 +56,7 @@
                     <div class="total-distance">
                         <a class="run-link"
                            href="{{ url_for('week_details', week=week|length) }}">
-                            <h5>{{ totalDistance[week|length] }} km</h5>
+                            <h5>{{ totalDistance[week|length]|float|round(1) }} km</h5>
                         </a>
                     </div>
                     {% if week.append(loop.index) %}{% endif %}
@@ -64,4 +64,6 @@
             {% endfor %}
         </div>
     {% endif %}
+    <br>
+    <br>
 {% endblock content %}

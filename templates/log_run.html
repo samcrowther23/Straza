@@ -22,13 +22,7 @@
                         name="run_type"
                         aria-describedby="addon2"
                         required>
-                    <option value="easy">Easy</option>
-                    <option value="long">Long</option>
-                    <option value="tempo">Tempo</option>
-                    <option value="interval">Interval workout</option>
-                    <option value="fartlek">Fartlek</option>
-                    <option value="race">Race</option>
-                    <option value="parkrun">Parkrun</option>
+                    {% for run_type in run_types %}<option value="{{ run_type }}">{{ run_type|title }}</option>{% endfor %}
                 </select>
             </div>
         </div>

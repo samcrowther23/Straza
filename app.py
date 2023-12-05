@@ -57,6 +57,8 @@ Base = db.Model
 
 empty_row = [0, 0, 0, 0, 0, 0, 0, 0]
 default_table = json.dumps([empty_row])
+
+
 class Run(Base):
     __tablename__ = "runs"
 
@@ -80,6 +82,21 @@ class Run(Base):
         return f"id={self.id}, type={self.run_type}, date={self.date}, distance={self.distance})"
 
 
+class Injury(Base):
+    __tablename__ = "injuries"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    start_date = Column(Date)
+    prevalence = Column(String(20))
+
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = relationship("User", back_populates="injuries")
+
+    def __repr__(self):
+        return f"Injury(id={self.id}, name={self.name}, start_date={self.start_date}, prevalence={self.prevalence})"
+
+
 class User(Base):
     __tablename__ = "user"
 
@@ -87,15 +104,15 @@ class User(Base):
     username = Column(String(50), unique=True)
     password = Column(String(100))
     profile_picture_path = Column(String(100), default="default_profile_picture.jpg")
+    about = Column(String(200))
     table_data = Column(JSON, default=default_table)
     table_colour = Column(JSON, default=default_table)
     run_matrix = Column(JSON, default=json.dumps([]))
     runs_by_week_matrix = Column(JSON, default=json.dumps([]))
     totalDistance_matrix = Column(JSON, default=json.dumps([]))
 
-    runs = relationship(
-        "Run", back_populates="user"
-    )  # Add a relationship to the Run class
+    runs = relationship("Run", back_populates="user")
+    injuries = relationship("Injury", back_populates="user")
 
     def __repr__(self):
         runs_info = ", ".join(
@@ -120,21 +137,18 @@ class User(Base):
         try:
             sorted_runs = sorted(self.runs, key=lambda run: run.date)
             if not sorted_runs:
-                    self.run_matrix = []
-                    self.totalDistance_matrix = []
-                    return None
+                self.run_matrix = []
+                self.totalDistance_matrix = []
+                return None
             start_date = sorted_runs[0].date
             end_date = sorted_runs[-1].date
             first_monday = start_date - timedelta(days=start_date.weekday())
             number_of_days = (end_date - first_monday).days + 1
             number_of_weeks = math.ceil(number_of_days / 7)
 
-
             self.run_matrix = [[0] * 7 for _ in range(number_of_weeks)]
             self.totalDistance_matrix = [0.0 for _ in range(number_of_weeks)]
             self.runs_by_week_matrix = [[] for _ in range(number_of_weeks)]
-
-            
 
             for run in sorted_runs:
                 date = run.date
@@ -282,7 +296,7 @@ def signup():
         username_taken = db_session.query(User).filter_by(username=username).first()
         if not username_taken:
             password = form.password.data
-            new_user = User(username=username, password=password) #type: ignore
+            new_user = User(username=username, password=password)  # type: ignore
             db_session.add(new_user)
             db_session.commit()
             session["logged_in"] = True
@@ -297,7 +311,8 @@ def signup():
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    users = db_session.query(User).all()
+    return render_template("home.html", users=users)
 
 
 column_names = [
@@ -373,7 +388,7 @@ def runs():
 @app.route("/run_details/<int:run_id>")
 def run_details(run_id):
     run = db_session.query(Run).filter(Run.id == run_id).first()
-    #print(run)
+    # print(run)
     time_in_zones = [0, 0, 0, 0]
     formatted_date = "1/1/70"
 
@@ -384,7 +399,7 @@ def run_details(run_id):
             run.zone_4_time,
             run.zone_5_time,
         )
-        #total = run.total_time
+        # total = run.total_time
 
         # try:
         #     z1 = float(total - z2 - z3 - z4 - z5)  # type: ignore
@@ -419,19 +434,17 @@ def delete_run(run_id):
                 distance = run.distance
                 db_session.delete(run)
                 db_session.commit()
-                                 
+
                 user.update_matrix()
-                if distance == 0.0: #type: ignore
+                if distance == 0.0:  # type: ignore
                     flash("workout deleted")
                 else:
-                    flash("run deleted") 
+                    flash("run deleted")
 
     except:
         flash("run doesnt exist")
 
     return redirect(url_for("runs"))
-
-
 
 
 @app.route("/week_details/<int:week>")
@@ -444,38 +457,47 @@ def week_details(week):
         for run_id in run_ids:
             run = db_session.query(Run).filter_by(id=run_id).first()
             if run:
-                time_in_zones[0] += int(run.zone_2_time) #type:ignore
-                time_in_zones[1] += int(run.zone_3_time) #type:ignore
-                time_in_zones[2] += int(run.zone_4_time) #type:ignore
-                time_in_zones[3] += int(run.zone_5_time) #type:ignore
+                time_in_zones[0] += int(run.zone_2_time)  # type:ignore
+                time_in_zones[1] += int(run.zone_3_time)  # type:ignore
+                time_in_zones[2] += int(run.zone_4_time)  # type:ignore
+                time_in_zones[3] += int(run.zone_5_time)  # type:ignore
                 total_time += run.total_time
-        return render_template("week_details.html", time_in_zones=time_in_zones, week=week, total_time=total_time)
+        return render_template(
+            "week_details.html",
+            time_in_zones=time_in_zones,
+            week=week,
+            total_time=total_time,
+        )
 
-                
-    return(redirect(url_for("index")))
+    return redirect(url_for("index"))
+
 
 def get_form_value_as_int(field_name):
     value = request.form.get(field_name)
     if value is not None:
         try:
-            #print(f"converting {field_name}")
+            # print(f"converting {field_name}")
             return int(value)
         except ValueError:
-            #print(f"could not convert {field_name} to int")
+            # print(f"could not convert {field_name} to int")
             return int(0)
     return None
+
 
 def get_form_value_as_float(field_name):
     value = request.form.get(field_name)
     if value is not None:
         try:
-            #print(f"converting {field_name}")
+            # print(f"converting {field_name}")
             return float(value)
-            
+
         except ValueError:
-            #print(f"could not convert {field_name} to float")
+            # print(f"could not convert {field_name} to float")
             return float(0.0)
     return None
+
+
+run_types = ("easy", "long", "tempo", "fortlek", "hills", "interval", "race", "parkrun")
 
 
 @app.route("/log_run", methods=["POST", "GET"])
@@ -508,7 +530,7 @@ def log_run():
             zone_5_time=zone_5_time,
             total_time=total_time,
             text=text,
-        ) #type: ignore
+        )  # type: ignore
 
         # Associate the run with the logged-in user
         user = get_user()
@@ -522,7 +544,8 @@ def log_run():
 
         return redirect(url_for("profile"))
 
-    return render_template("log_run.html")
+    return render_template("log_run.html", run_types=run_types)
+
 
 @app.route("/log_workout", methods=["POST", "GET"])
 def log_workout():
@@ -541,19 +564,18 @@ def log_workout():
         zone_5_time = get_form_value_as_int("zone_5_time")
         total_time = get_form_value_as_int("total_time")
         text = request.form.get("additional_notes")
-        
 
         new_workout = Run(
-        date=run_date,
-        distance=0,
-        run_type=workout,
-        zone_2_time=zone_2_time,
-        zone_3_time=zone_3_time,
-        zone_4_time=zone_4_time,
-        zone_5_time=zone_5_time,
-        total_time=total_time,
-        text=text,
-        ) #type: ignore
+            date=run_date,
+            distance=0,
+            run_type=workout,
+            zone_2_time=zone_2_time,
+            zone_3_time=zone_3_time,
+            zone_4_time=zone_4_time,
+            zone_5_time=zone_5_time,
+            total_time=total_time,
+            text=text,
+        )  # type: ignore
 
         user = get_user()
         if user:
@@ -567,6 +589,7 @@ def log_workout():
         return redirect(url_for("profile"))
 
     return render_template("log_workout.html")
+
 
 @app.route("/edit_run/<int:run_id>", methods=["GET", "POST"])
 def edit_run(run_id):
@@ -600,7 +623,7 @@ def edit_run(run_id):
                 zone_5_time=zone_5_time,
                 total_time=total_time,
                 text=text,
-            ) #type: ignore
+            )  # type: ignore
 
             # Associate the run with the logged-in user
             user = get_user()
@@ -609,12 +632,13 @@ def edit_run(run_id):
                 user.runs.append(edited_run)
                 db_session.commit()
                 edited_run_id = edited_run.id
+                user.update_matrix()
                 flash("Run editted")
                 return redirect(url_for("run_details", run_id=edited_run_id))
             else:
                 flash("No user")
                 return redirect(url_for("index"))
-        return render_template("edit_run.html", run=run)
+        return render_template("edit_run.html", run=run, run_types=run_types)
     return redirect(url_for("index"))
 
 
@@ -733,6 +757,32 @@ def change_password():
     return render_template("change_password.html", form=form)
 
 
+@app.route("/hab_lab", methods=["GET", "POST"])
+def hab_lab():
+    user = get_user()
+    if request.method == "POST":
+        # Form submitted, handle the update
+        injury_name = request.form.get("injury_name")
+        start_date = request.form.get("start_date")
+        prevalence = request.form.get("prevalence")
+
+        new_injury = Injury(
+            name=injury_name,
+            start_date=start_date,
+            prevalence = prevalence
+        )  # type: ignore
+
+        user = get_user()
+        if user:
+            user.injuries.append(new_injury)
+            db_session.commit()
+
+    if user:
+        return render_template("hab_lab.html", user=user)
+    else:
+        return redirect(url_for("index"))
+
+
 @app.route("/users")
 def users():
     users = db_session.query(User).all()
@@ -783,7 +833,7 @@ def handle_http_exception(e):
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with app.app_context():
         Session = sessionmaker(bind=db.engine)
         db_session = Session()

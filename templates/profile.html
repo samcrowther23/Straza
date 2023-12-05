@@ -8,29 +8,32 @@
     </div>
     <br />
     <br />
-    <h5>{{ username }}</h5>
     <form id="profile_form" action='{{ url_for("profile") }}' method="post">
-        <button type="submit"
-                class="btn btn-white btn-small"
-                name="action"
-                value="edit">Edit Profile</button>
-        <button type="submit"
-                class="btn btn-white btn-small"
-                name="action"
-                value="stats">Run Log</button>
-        <br>
-        <br>
-        <br>
-        <button type="submit"
-                class="btn btn-orange btn-medium"
-                name="action"
-                value="add_run">Add Run</button>
+        <div class="row">
+            <div class="col-md-2">
+                <h5>{{ username }}</h5>
+            </div>
+            <div class="col-md-6">
                 <button type="submit"
-                class="btn btn-orange btn-medium"
-                name="action"
-                value="add_workout">Add Workout</button>
-    </form>
-    <br />
+                        class="btn btn-white btn-small"
+                        name="action"
+                        value="edit">Edit Profile</button>
+            </div>
+        </div>
+    </a>
+    <br>
+    <br>
+    <br>
+    <button type="submit"
+            class="btn btn-orange btn-medium"
+            name="action"
+            value="add_run">Add Run</button>
+    <button type="submit"
+            class="btn btn-orange btn-medium"
+            name="action"
+            value="add_workout">Add Workout</button>
+</form>
+<br />
 </div>
 <div class="container-fluid fade-container py-3">
     <div class="text-center">

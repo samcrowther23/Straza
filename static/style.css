@@ -133,21 +133,6 @@
 }
 
 
-.run {
-    border: 2px groove;
-    transition: background-color 0.2s, color 0.3s;
-    /* Add a border */
-    border-radius: 8px;
-    /* Round the corners */
-    padding-top: 10px;
-    padding-bottom: 6px;
-    text-align: center;
-    margin: 10px;
-    background-color: rgb(202, 55, 55);
-    color: white;
-    border-color: rgb(202, 55, 55);
-}
-
 :root {
   --website-color: rgb(255, 69, 0);
   --website-text: black;
@@ -158,7 +143,7 @@
   --long-bg: rgb(106, 90, 205);
   --long-text: white;
 
-  --tempo-bg: rgb(255, 142, 108);
+  --tempo-bg: rgb(29, 206, 73);
   --tempo-text: black;
 
   --interval-bg: rgb(221, 79, 86);
@@ -173,6 +158,9 @@
   --parkrun-bg: rgb(255, 165, 0);
   --parkrun-text: black;
 
+  --hills-bg: rgb(98, 197, 52);
+  --hills-text: black;
+
   --workout-bg: rgb(236, 49, 49);
 }
 
@@ -185,12 +173,12 @@
     border: 2px groove;
     transition: background-color 0.2s, color 0.3s;
     /* Add a border */
-    border-radius: 8px;
+    border-radius: 6px;
     /* Round the corners */
-    padding-top: 10px;
-    padding-bottom: 6px;
+    padding-top: 8px;
+    padding-bottom: 4px;
     text-align: center;
-    margin: 10px;
+    margin: 8px;
     
 }
 
@@ -198,12 +186,20 @@
     background-color: var(--workout-bg);
     color: white;
     border-color: var(--workout-bg);
+    padding-top: 4px;
+    padding-bottom: 0px;
+    font-size: smaller;
 }
 
 .workout:hover {
     background-color: var(--website-color);
     color: rgb(255, 255, 255);
     border-color: var(--website-color);
+}
+
+.easy,.long,.tempo,.interval,.fartlek,.race,.parkrun, .hills {
+    padding-top: 8px;
+    padding-bottom: 4px;
 }
 
 .easy {
@@ -290,6 +286,17 @@
     border-color: var(--website-color);
 }
 
+.hills {
+    background-color: var(--hills-bg);
+    color: var(--hills-text);
+    border-color: var(--hills-bg);
+}
+
+.parkrun:hover {
+    background-color: var(--website-color);
+    color: white;
+    border-color: var(--website-color);
+}
 
 
 

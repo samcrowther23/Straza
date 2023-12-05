@@ -24,14 +24,10 @@
                         aria-describedby="addon2"
                         value="{{ run.run_type }}"
                         required>
-                    <option value="easy" {% if run.run_type == 'easy' %}selected{% endif %}>Easy</option>
-                    <option value="long" {% if run.run_type == 'long' %}selected{% endif %}>Long</option>
-                    <option value="tempo" {% if run.run_type == 'tempo' %}selected{% endif %}>Tempo</option>
-                    <option value="interval"
-                            {% if run.run_type == 'interval' %}selected{% endif %}>Interval workout</option>
-                    <option value="fartlek" {% if run.run_type == 'fartlek' %}selected{% endif %}>Fartlek</option>
-                    <option value="race" {% if run.run_type == 'race' %}selected{% endif %}>Race</option>
-                    <option value="parkrun" {% if run.run_type == 'parkrun' %}selected{% endif %}>Parkrun</option>
+                    {% for run_type in run_types %}
+                        <option value="{{ run_type }}"
+                                {% if run.run_type == 'run_type' %}selected{% endif %}>{{ run_type|title }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
